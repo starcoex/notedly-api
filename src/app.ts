@@ -38,24 +38,21 @@ export const resolvers = {
   },
 };
 
-const server = new ApolloServer<MyContext>({
-  typeDefs,
-  resolvers,
-});
-
 interface MyContext {
   tonken?: string;
 }
 
 const app = express();
 const httpServer = http.createServer(app);
-const sever = new ApolloServer({
+const server = new ApolloServer({
   typeDefs,
   resolvers,
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
 
 await server.start();
+
+app.use("/", (req, res) => res.send("Home"));
 app.use(
   "/api",
   cors<cors.CorsRequest>(),
